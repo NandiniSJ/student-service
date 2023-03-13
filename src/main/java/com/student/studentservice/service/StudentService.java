@@ -35,4 +35,20 @@ public class StudentService {
         studentRepository.deleteById(id);
     }
 
+    public StudentResponse update(Long id, StudentRequest studentRequest){
+        final Optional<Student> studentOptional = studentRepository.findById(id);
+        if(studentOptional.isEmpty()){
+            return save(studentRequest);
+        }
+        final Student student = studentOptional.get();
+        student.setFirstName(studentRequest.getFirstName());
+        student.setLastname(studentRequest.getLastName());
+        student.setGpa(studentRequest.getGpa());
+        student.setYearOfPassing(studentRequest.getYearOfPassing());
+
+        final Student savedStudent = studentRepository.save(student);
+
+        return new StudentResponse(savedStudent.getId(), savedStudent.getFirstName(), savedStudent.getLastname(), savedStudent.getGpa(), savedStudent.getYearOfPassing());
+    }
+
 }

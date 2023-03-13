@@ -19,13 +19,13 @@ class StudentServiceTest {
     private StudentService studentService;
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         studentService = new StudentService(studentRepository);
     }
 
 
     @Test
-    void shouldSaveStudent(){
+    void shouldSaveStudent() {
         Student student = new Student(null, "Nandini", "Jadhav", 3.45, 2020);
         StudentRequest studentRequest = new StudentRequest("Nandini", "Jadhav", 3.45, 2020);
         Mockito.when(studentRepository.saveAndFlush(Mockito.any())).thenReturn(student);
@@ -37,7 +37,7 @@ class StudentServiceTest {
     }
 
     @Test
-    void shouldReturnStudent(){
+    void shouldReturnStudent() {
         Student student = new Student(1L, "Nandini", "Jadhav", 3.45, 2020);
         Mockito.when(studentRepository.findById(1L)).thenReturn(Optional.of(student));
 
@@ -49,10 +49,26 @@ class StudentServiceTest {
     }
 
     @Test
-    void shouldDeleteStudent(){
+    void shouldDeleteStudent() {
         studentService.delete(1L);
 
         Mockito.verify(studentRepository).deleteById(1L);
+    }
+
+    @Test
+    void shouldUpdateStudent() {
+        StudentRequest studentRequest = new StudentRequest("Nandini", "Jadhav", 4.45, 2020);
+        Student student = new Student(1L, "Nandini", "Jadhav", 3.45, 2020);
+        Mockito.when(studentRepository.findById(1L)).thenReturn(Optional.of(student));
+        Student savedStudent = new Student(1L, "Nandini", "Jadhav", 4.45, 2020);
+        Mockito.when(studentRepository.save(savedStudent)).thenReturn(savedStudent);
+
+        final StudentResponse studentResponse = studentService.update(1L, studentRequest);
+
+        assertEquals("Nandini", studentResponse.getFirstName());
+        assertEquals(1L, studentResponse.getId());
+        assertEquals(4.45, studentResponse.getGPA());
+
     }
 
 

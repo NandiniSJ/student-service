@@ -27,4 +27,9 @@ public class StudentController {
     public void delete(@RequestParam(value = "id") Long id){
         studentService.delete(id);
     }
+
+    @PutMapping("/student")
+    public StudentResponse update(@RequestParam(value = "id") Long id, @RequestBody StudentRequest studentRequest){
+        return studentService.update(id, studentRequest);
+    }
 }

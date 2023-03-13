@@ -29,7 +29,7 @@ class StudentControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    void shouldSaveStudent() throws Exception{
+    void shouldSaveStudent() throws Exception {
 
         String body = "{\n" +
                 "   \"firstName\": \"Nandini\",\n" +
@@ -49,7 +49,7 @@ class StudentControllerTest {
     }
 
     @Test
-    void shouldReturnStudent() throws Exception{
+    void shouldReturnStudent() throws Exception {
         Student student = new Student(1L, "Nandini", "Jadhav", 3.45, 2020);
         studentRepository.save(student);
 
@@ -62,13 +62,36 @@ class StudentControllerTest {
     }
 
     @Test
-    void shouldDeleteStudent() throws Exception{
+    void shouldDeleteStudent() throws Exception {
         Student student = new Student(1L, "Nandini", "Jadhav", 3.45, 2020);
         studentRepository.save(student);
         this.mockMvc.perform(delete("/student?id=1"))
                 .andExpect(status().isOk());
         final Optional<Student> studentOptional = studentRepository.findById(1L);
         assertTrue(studentOptional.isEmpty());
+    }
+
+    @Test
+    void shouldUpdateStudent() throws Exception {
+        Student student = new Student(1L, "Nandini", "Jadhav", 3.45, 2020);
+        studentRepository.save(student);
+
+        String body = "{\n" +
+                "   \"firstName\": \"Nandini\",\n" +
+                "   \"lastName\": \"Jadhav\",\n" +
+                "   \"gpa\": \"4.45\",\n" +
+                "   \"yearOfPassing\": \"2020\"\n" +
+                "}";
+
+        this.mockMvc.perform(put("/student?id=1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().isOk());
+
+        Student updatedStudent = studentRepository.findById(1L).get();
+        assertEquals(4.45, updatedStudent.getGpa());
+
+
     }
 
 

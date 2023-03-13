@@ -1,8 +1,6 @@
 package com.student.studentservice.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,8 +9,10 @@ import javax.persistence.Id;
 
 @Entity(name = "students")
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 public class Student {
 
     @Id
@@ -22,5 +22,6 @@ public class Student {
     private String lastname;
     private double gpa;
     private int yearOfPassing;
+
 
 }
